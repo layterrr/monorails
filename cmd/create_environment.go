@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"errors"
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -54,7 +55,8 @@ var createEnvironmentCmd = &cobra.Command{
 		projectName := args[0]
 		_, err := createEnvironment(projectName)
 		if err != nil {
-			log.Fatal("Failed to create environment:", err.Error())
+			fmt.Printf("Error creating environment: %v", err)
+			os.Exit(1)
 		}
 	},
 }

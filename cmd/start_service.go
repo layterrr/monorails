@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"log"
+	"os"
 	"os/exec"
 
 	"github.com/spf13/cobra"
@@ -21,8 +21,8 @@ func startServices(services []string) error {
 	args = append(args, "up")
 	args = append(args, "--build")
 	cmd := exec.Command("docker-compose", args...)
-	cmd.Dir = synthwaveDir
-	fmt.Println(synthwaveDir, cmd.Dir)
+	cmd.Dir = projectDir
+	fmt.Println(projectDir, cmd.Dir)
 	_, err := runCommand("Running docker-compose up", cmd)
 	if err != nil {
 		return err
@@ -45,12 +45,14 @@ var startServicesCmd = &cobra.Command{
 		if allServices {
 			serviceNames, err = listServices()
 			if err != nil {
-				log.Fatal("Error listing services:", err)
+				fmt.Printf("Error listing services: %v\n", err)
+				os.Exit(1)
 			}
 		}
 
 		if err := startServices(serviceNames); err != nil {
-			log.Fatal("Error starting services:", err)
+			fmt.Printf("Error starting services: %v\n", err)
+			os.Exit(1)
 		}
 	},
 }

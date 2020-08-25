@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -18,7 +18,7 @@ func genProto(service string) error {
 		return nil
 	}
 
-	cmd := createCommand(serviceConfig.GenProtoCommand, synthwaveDir)
+	cmd := createCommand(serviceConfig.GenProtoCommand, projectDir)
 	_, err = runCommand(fmt.Sprintf("Generating protos for %s", serviceConfig.Name), cmd)
 	if err != nil {
 		return err
@@ -42,14 +42,16 @@ var genProtoCmd = &cobra.Command{
 		if allServices {
 			serviceNames, err = listServices()
 			if err != nil {
-				panic(err)
+				fmt.Printf("Error listing services: %v", err)
+				os.Exit(1)
 			}
 		}
 
 		for _, serviceName := range serviceNames {
 			err = genProto(serviceName)
 			if err != nil {
-				log.Fatal("Failed to generate proto:", err.Error())
+				fmt.Printf("Error generating protos: %v", err)
+				os.Exit(1)
 			}
 		}
 	},

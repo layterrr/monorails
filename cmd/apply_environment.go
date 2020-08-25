@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -39,7 +40,8 @@ var applyCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := applyCommand()
 		if err != nil {
-			log.Fatal("Failed to generate terraform apply command:", err.Error())
+			fmt.Printf("Error generating terraform command: %v", err)
+			os.Exit(1)
 		}
 	},
 }

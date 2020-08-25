@@ -11,7 +11,7 @@ import (
 
 func listServices() ([]string, error) {
 	services := []string{}
-	servicesDir := path.Join(synthwaveDir, "services")
+	servicesDir := path.Join(projectDir, "services")
 	files, err := ioutil.ReadDir(servicesDir)
 	if err != nil {
 		return nil, err

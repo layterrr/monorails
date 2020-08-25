@@ -35,7 +35,7 @@ type serviceConfig struct {
 
 func readServiceConfig(service string) (*serviceConfig, error) {
 	config := &serviceConfig{}
-	in, err := ioutil.ReadFile(path.Join(synthwaveDir, service, "service.yml"))
+	in, err := ioutil.ReadFile(path.Join(projectDir, service, "service.yml"))
 	if err != nil {
 		return nil, err
 	}

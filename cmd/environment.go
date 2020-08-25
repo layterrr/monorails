@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"os/exec"
 	"strings"
 
@@ -165,6 +164,6 @@ func createTerraformWorkspace(name string) error {
 
 func checkEnvironment(commandName string) {
 	if !isTest && !force {
-		log.Fatalf("Use the `--force` flag to run %s against a non test environment", commandName)
+		fmt.Printf("Use the `--force` flag to run %s against a non test environment\n", commandName)
 	}
 }

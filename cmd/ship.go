@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"log"
+	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -45,12 +45,14 @@ var shipCmd = &cobra.Command{
 			fmt.Println(strings.Join(serviceNames, ", "))
 			serviceConfig, err := readServiceConfig(serviceName)
 			if err != nil {
-				panic(err)
+				fmt.Printf("Error reading service config: %v\n", err)
+				os.Exit(1)
 			}
 
 			err = shipService(serviceConfig)
 			if err != nil {
-				log.Fatal("Failed to ship service:", err.Error())
+				fmt.Printf("Error shipping service: %v\n", err)
+				os.Exit(1)
 			}
 		}
 	},

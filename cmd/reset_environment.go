@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	"log"
+	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -46,7 +47,8 @@ var resetEnvironmentCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		_, err := resetEnvironment()
 		if err != nil {
-			log.Fatal("Failed to reset environment:", err.Error())
+			fmt.Printf("Error resetting environment: %v", err)
+			os.Exit(1)
 		}
 	},
 }

@@ -2,7 +2,8 @@ package cmd
 
 import (
 	"errors"
-	"log"
+	"fmt"
+	"os"
 	"os/exec"
 	"path"
 	"strings"
@@ -24,7 +25,7 @@ func checkService(service string) error {
 	commandName := commandParts[0]
 	commandArgs := commandParts[1:]
 	cmd := exec.Command(commandName, commandArgs...)
-	cmd.Dir = path.Join(synthwaveDir, service)
+	cmd.Dir = path.Join(projectDir, service)
 	_, err = runCommand("Checking service", cmd)
 
 	if err != nil {
@@ -49,14 +50,16 @@ var checkServiceCmd = &cobra.Command{
 		if allServices {
 			services, err = listServices()
 			if err != nil {
-				panic(err)
+				fmt.Printf("Error listing services: %v", err)
+				os.Exit(1)
 			}
 		}
 
 		for _, service := range services {
 			err := checkService(service)
 			if err != nil {
-				log.Fatal("Failed to check service:", err.Error())
+				fmt.Printf("Error checking service: %v", err)
+				os.Exit(1)
 			}
 		}
 	},

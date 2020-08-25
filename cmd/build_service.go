@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"log"
+	"os"
 	"os/exec"
 
 	"github.com/spf13/cobra"
@@ -36,19 +36,22 @@ var buildServiceCmd = &cobra.Command{
 		if allServices {
 			serviceNames, err = listServices()
 			if err != nil {
-				panic(err)
+				fmt.Printf("Error listing services: %v", err)
+				os.Exit(1)
 			}
 		}
 
 		for _, serviceName := range serviceNames {
 			serviceConfig, err := readServiceConfig(serviceName)
 			if err != nil {
-				panic(err)
+				fmt.Printf("Error reading service config: %v", err)
+				os.Exit(1)
 			}
 
 			err = buildService(serviceConfig)
 			if err != nil {
-				log.Fatal("Failed to build service:", err.Error())
+				fmt.Printf("Error building service: %v", err)
+				os.Exit(1)
 			}
 		}
 	},

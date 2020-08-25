@@ -3,7 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"log"
+	"os"
 	"os/exec"
 
 	"github.com/spf13/cobra"
@@ -50,12 +50,14 @@ var deployServiceCmd = &cobra.Command{
 		for _, serviceName := range serviceNames {
 			serviceConfig, err := readServiceConfig(serviceName)
 			if err != nil {
-				panic(err)
+				fmt.Printf("Error reading service config: %v", err)
+				os.Exit(1)
 			}
 
 			err = deployService(serviceConfig)
 			if err != nil {
-				log.Fatal("Failed to deploy service:", err.Error())
+				fmt.Printf("Error deploying service: %v", err)
+				os.Exit(1)
 			}
 		}
 	},

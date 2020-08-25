@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -11,10 +10,15 @@ import (
 	"time"
 )
 
+var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
+var projectDir = getProjectDirectory()
+var infraDir = path.Join(projectDir, "infra")
+
 func getProjectDirectory() string {
 	curDir := os.Getenv("CURRENT_MONORAILS_DIR")
 	if len(curDir) == 0 {
-		log.Fatal("No $CURRENT_MONORAILS_DIR variable set")
+		fmt.Println("No $CURRENT_MONORAILS_DIR variable set")
+		os.Exit(1)
 	}
 	return curDir
 }
@@ -25,10 +29,6 @@ func getEnv(key, fallback string) string {
 	}
 	return fallback
 }
-
-var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
-var synthwaveDir = getProjectDirectory()
-var infraDir = path.Join(synthwaveDir, "infra")
 
 func randomString(n int) string {
 	letters := "abcdefghijklmnopqrstuvwxyz1234567890"
@@ -55,7 +55,7 @@ func createCommand(command, dir string) *exec.Cmd {
 	for i, arg := range commandArgs {
 		gopath := os.ExpandEnv("$GOPATH")
 		arg = strings.ReplaceAll(arg, "$GOPATH", gopath)
-		arg = strings.ReplaceAll(arg, "$CURRENT_MONORAILS_DIR", synthwaveDir)
+		arg = strings.ReplaceAll(arg, "$CURRENT_MONORAILS_DIR", projectDir)
 		commandArgs[i] = arg
 	}
 	fmt.Println(commandArgs)
@@ -66,7 +66,7 @@ func createCommand(command, dir string) *exec.Cmd {
 
 func runCommand(description string, cmd *exec.Cmd) (string, error) {
 	if cmd.Dir == "" {
-		cmd.Dir = synthwaveDir
+		cmd.Dir = projectDir
 	}
 	printCmd(description, cmd)
 	var out []byte
