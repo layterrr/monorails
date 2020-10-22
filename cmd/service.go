@@ -33,7 +33,7 @@ type serviceConfig struct {
 	IncludePaths    []string `yaml:"include"`
 }
 
-func readServiceConfig(service string) (*serviceConfig, error) {
+func readServiceConfig(projectDir, service string) (*serviceConfig, error) {
 	config := &serviceConfig{}
 	in, err := ioutil.ReadFile(path.Join(projectDir, service, "service.yml"))
 	if err != nil {

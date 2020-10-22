@@ -12,10 +12,10 @@ func shipService(service *serviceConfig) (err error) {
 	if err := testService(service.Path); err != nil {
 		return err
 	}
-	if err := checkService(service.Path); err != nil {
+	if err := checkService("projectDir", service.Path); err != nil {
 		return err
 	}
-	if err := genProto(service.Path); err != nil {
+	if err := genProto("projectDir", service.Path); err != nil {
 		return err
 	}
 	if err := buildService(service); err != nil {
@@ -35,7 +35,7 @@ var shipCmd = &cobra.Command{
 		var err error
 		serviceNames := args
 		if allServices {
-			serviceNames, err = listServices()
+			serviceNames, err = listServices("projectDir")
 			if err != nil {
 				panic(err)
 			}
@@ -43,7 +43,7 @@ var shipCmd = &cobra.Command{
 
 		for _, serviceName := range serviceNames {
 			fmt.Println(strings.Join(serviceNames, ", "))
-			serviceConfig, err := readServiceConfig(serviceName)
+			serviceConfig, err := readServiceConfig("projectDir", serviceName)
 			if err != nil {
 				fmt.Printf("Error reading service config: %v\n", err)
 				os.Exit(1)

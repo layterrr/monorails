@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func checkService(service string) error {
-	serviceConfig, err := readServiceConfig(service)
+func checkService(projectDir, service string) error {
+	serviceConfig, err := readServiceConfig("projectDir", service)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ var checkServiceCmd = &cobra.Command{
 		var err error
 		services := args
 		if allServices {
-			services, err = listServices()
+			services, err = listServices("projectDir")
 			if err != nil {
 				fmt.Printf("Error listing services: %v", err)
 				os.Exit(1)
@@ -56,7 +56,7 @@ var checkServiceCmd = &cobra.Command{
 		}
 
 		for _, service := range services {
-			err := checkService(service)
+			err := checkService("projectDir", service)
 			if err != nil {
 				fmt.Printf("Error checking service: %v", err)
 				os.Exit(1)

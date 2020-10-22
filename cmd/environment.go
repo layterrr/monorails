@@ -142,7 +142,7 @@ func appendUniqueSecrets(secrets map[string]string) (map[string]string, error) {
 
 func terraformCommand(args []string, vars map[string]string) *exec.Cmd {
 	cmd := exec.Command("terraform", args...)
-	cmd.Dir = infraDir
+	cmd.Dir = "infraDir"
 
 	for k, v := range vars {
 		tfVar := fmt.Sprintf("TF_VAR_%s=\"%s\"", k, v)

@@ -5,14 +5,11 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
-	"path"
 	"strings"
 	"time"
 )
 
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
-var projectDir = getProjectDirectory()
-var infraDir = path.Join(projectDir, "infra")
 
 func getProjectDirectory() string {
 	curDir := os.Getenv("CURRENT_MONORAILS_DIR")
@@ -55,7 +52,7 @@ func createCommand(command, dir string) *exec.Cmd {
 	for i, arg := range commandArgs {
 		gopath := os.ExpandEnv("$GOPATH")
 		arg = strings.ReplaceAll(arg, "$GOPATH", gopath)
-		arg = strings.ReplaceAll(arg, "$CURRENT_MONORAILS_DIR", projectDir)
+		arg = strings.ReplaceAll(arg, "$CURRENT_MONORAILS_DIR", "projectDir")
 		commandArgs[i] = arg
 	}
 	fmt.Println(commandArgs)
@@ -66,7 +63,7 @@ func createCommand(command, dir string) *exec.Cmd {
 
 func runCommand(description string, cmd *exec.Cmd) (string, error) {
 	if cmd.Dir == "" {
-		cmd.Dir = projectDir
+		cmd.Dir = "projectDir"
 	}
 	printCmd(description, cmd)
 	var out []byte

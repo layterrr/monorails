@@ -21,8 +21,8 @@ func startServices(services []string) error {
 	args = append(args, "up")
 	args = append(args, "--build")
 	cmd := exec.Command("docker-compose", args...)
-	cmd.Dir = projectDir
-	fmt.Println(projectDir, cmd.Dir)
+	cmd.Dir = "projectDir"
+	fmt.Println("projectDir", cmd.Dir)
 	_, err := runCommand("Running docker-compose up", cmd)
 	if err != nil {
 		return err
@@ -43,7 +43,7 @@ var startServicesCmd = &cobra.Command{
 		var err error
 		serviceNames := args
 		if allServices {
-			serviceNames, err = listServices()
+			serviceNames, err = listServices("projectDir")
 			if err != nil {
 				fmt.Printf("Error listing services: %v\n", err)
 				os.Exit(1)

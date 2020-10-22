@@ -8,8 +8,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func genProto(service string) error {
-	serviceConfig, err := readServiceConfig(service)
+func genProto(projectDir, service string) error {
+	serviceConfig, err := readServiceConfig("projectDir", service)
 	if err != nil {
 		return err
 	}
@@ -40,7 +40,7 @@ var genProtoCmd = &cobra.Command{
 		var err error
 		serviceNames := args
 		if allServices {
-			serviceNames, err = listServices()
+			serviceNames, err = listServices("projectDir")
 			if err != nil {
 				fmt.Printf("Error listing services: %v", err)
 				os.Exit(1)
@@ -48,7 +48,7 @@ var genProtoCmd = &cobra.Command{
 		}
 
 		for _, serviceName := range serviceNames {
-			err = genProto(serviceName)
+			err = genProto("projectDir", serviceName)
 			if err != nil {
 				fmt.Printf("Error generating protos: %v", err)
 				os.Exit(1)
