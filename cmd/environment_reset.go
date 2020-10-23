@@ -18,17 +18,7 @@ func resetEnvironment() (string, error) {
 	formattedProjectName := formatProjectName(projectName)
 
 	newProjectID := generateProjectID(formattedProjectName)
-	secrets, err := readSharedSecrets(currentProjectID)
-	if err != nil {
-		return "", err
-	}
-
-	secrets, err = appendUniqueSecrets(secrets)
-	if err != nil {
-		return "", err
-	}
-
-	vars, err := projectVars(projectName, formattedProjectName, newProjectID, secrets)
+	vars, err := projectVars(projectName, formattedProjectName, newProjectID)
 	if err != nil {
 		return "", err
 	}

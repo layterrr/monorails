@@ -17,12 +17,7 @@ func applyCommand() error {
 	}
 	formattedProjectName := formatProjectName(projectName)
 
-	secrets, err := readAllSecrets(currentProjectID)
-	if err != nil {
-		return err
-	}
-
-	vars, err := projectVars(projectName, formattedProjectName, currentProjectID, secrets)
+	vars, err := projectVars(projectName, formattedProjectName, currentProjectID)
 	if err != nil {
 		return err
 	}

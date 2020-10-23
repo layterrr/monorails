@@ -20,17 +20,7 @@ func createEnvironment(projectName string) (string, error) {
 	}
 
 	projectID := generateProjectID(formattedProjectName)
-	secrets, err := readSharedSecrets(duplicateProjectID)
-	if err != nil {
-		return "", err
-	}
-
-	secrets, err = appendUniqueSecrets(secrets)
-	if err != nil {
-		return "", err
-	}
-
-	vars, err := projectVars(projectName, formattedProjectName, projectID, secrets)
+	vars, err := projectVars(projectName, formattedProjectName, projectID)
 	if err != nil {
 		return "", err
 	}

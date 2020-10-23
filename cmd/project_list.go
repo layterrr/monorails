@@ -7,7 +7,15 @@ import (
 )
 
 func listProjects() ([]string, error) {
-	return nil, nil
+	config, err := readProjectsConfig()
+	if err != nil {
+		return nil, err
+	}
+	projects := []string{}
+	for project := range config.Projects {
+		projects = append(projects, project)
+	}
+	return projects, nil
 }
 
 var listProjectsCmd = &cobra.Command{
