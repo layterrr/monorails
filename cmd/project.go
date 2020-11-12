@@ -3,6 +3,7 @@ package cmd
 import (
 	"io/ioutil"
 	"os"
+	"path"
 
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
@@ -13,17 +14,27 @@ type projectsConfig struct {
 	Selected string            `yaml:"selected"`
 }
 
-func projectsConfigPath() string {
+func projectsConfigPath() (string, error) {
 	projectConfig, ok := os.LookupEnv("MONORAILS_CONFIG")
 	if ok {
-		return projectConfig
+		return projectConfig, nil
 	}
-	return "~/.monorails.yaml"
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	return path.Join(home, ".monorails.yml"), nil
 }
 
 func readProjectsConfig() (*projectsConfig, error) {
-	config := &projectsConfig{}
-	in, err := ioutil.ReadFile(projectsConfigPath())
+	config := &projectsConfig{
+		Projects: map[string]string{},
+	}
+	configPath, err := projectsConfigPath()
+	if err != nil {
+		return nil, err
+	}
+	in, err := ioutil.ReadFile(configPath)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +49,11 @@ func updateProjectsConfig(config *projectsConfig) error {
 	if err != nil {
 		return err
 	}
-	f, err := os.Create(projectsConfigPath())
+	configPath, err := projectsConfigPath()
+	if err != nil {
+		return err
+	}
+	f, err := os.Create(configPath)
 	if err != nil {
 		return err
 	}

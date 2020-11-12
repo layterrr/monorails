@@ -2,9 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"html/template"
+	"io/ioutil"
 	"math/rand"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"time"
 )
@@ -92,4 +95,42 @@ func cloudrunServiceAccount(projectNumber string) string {
 
 func defaultServiceAccount(projectNumber string) string {
 	return fmt.Sprintf("serviceAccount:%s-compute@developer.gserviceaccount.com", projectNumber)
+}
+
+func findAndParseTemplates(rootDir string) (*template.Template, error) {
+	cleanRoot := filepath.Clean(rootDir)
+	pfx := len(cleanRoot) + 1
+	root := template.New("")
+
+	err := filepath.Walk(cleanRoot, func(path string, info os.FileInfo, e1 error) error {
+		if !info.IsDir() && strings.HasSuffix(path, ".html") {
+			if e1 != nil {
+				return e1
+			}
+
+			b, e2 := ioutil.ReadFile(path)
+			if e2 != nil {
+				return e2
+			}
+
+			name := path[pfx:]
+			t := root.New(name)
+			_, e2 = t.Parse(string(b))
+			if e2 != nil {
+				return e2
+			}
+		}
+
+		return nil
+	})
+
+	return root, err
+}
+
+func copyTemplate(dir string, data interface{}) error {
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, e1 error) error {
+		fmt.Println(path)
+		return nil
+	})
+	return err
 }

@@ -14,6 +14,9 @@ func createProject(name string) error {
 	if err != nil {
 		return err
 	}
+	if _, ok := projectsConfig.Projects[name]; ok {
+		return errors.New("Project already exists")
+	}
 	pwd, err := os.Getwd()
 	if err != nil {
 		return err
@@ -38,12 +41,14 @@ var createProjectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 		if err := createProject(name); err != nil {
-			panic(err)
+			fmt.Printf("%v\n", err)
+			os.Exit(1)
 		}
 		if err := selectProject(name); err != nil {
-			panic(err)
+			fmt.Printf("%v\n", err)
+			os.Exit(1)
 		}
-		fmt.Printf("Created project %s", name)
+		fmt.Printf("Created project %s\n", name)
 	},
 }
 

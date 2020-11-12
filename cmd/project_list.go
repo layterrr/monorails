@@ -2,32 +2,27 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
-
-func listProjects() ([]string, error) {
-	config, err := readProjectsConfig()
-	if err != nil {
-		return nil, err
-	}
-	projects := []string{}
-	for project := range config.Projects {
-		projects = append(projects, project)
-	}
-	return projects, nil
-}
 
 var listProjectsCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all projects",
 	Run: func(cmd *cobra.Command, args []string) {
-		projects, err := listProjects()
+		config, err := readProjectsConfig()
 		if err != nil {
-			panic(err)
+			fmt.Printf("%v\n", err)
+			os.Exit(1)
 		}
-		for _, project := range projects {
-			fmt.Println(project)
+		for project := range config.Projects {
+			line := ""
+			if project == config.Selected {
+				line = "* "
+			}
+			line = line + project
+			fmt.Println(line)
 		}
 	},
 }

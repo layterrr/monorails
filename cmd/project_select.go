@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -32,9 +33,10 @@ var selectProjectCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		name := args[0]
 		if err := selectProject(name); err != nil {
-			panic(err)
+			fmt.Printf("%v\n", err)
+			os.Exit(1)
 		}
-		fmt.Printf("Selected project %s", name)
+		fmt.Printf("Selected project %s\n", name)
 	},
 }
 
