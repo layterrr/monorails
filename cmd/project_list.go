@@ -16,6 +16,9 @@ var listProjectsCmd = &cobra.Command{
 			fmt.Printf("%v\n", err)
 			os.Exit(1)
 		}
+		if len(config.Projects) == 0 {
+			fmt.Println("No projects found")
+		}
 		for project := range config.Projects {
 			line := ""
 			if project == config.Selected {

@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/go-git/go-git/v5"
 	"github.com/spf13/cobra"
 )
 
@@ -21,10 +22,27 @@ func createProject(name string) error {
 	if err != nil {
 		return err
 	}
-	projectsConfig.Projects[name] = path.Join(pwd, name)
+
+	projectDir := path.Join(pwd, name)
+	projectsConfig.Projects[name] = projectDir
 	if err := updateProjectsConfig(projectsConfig); err != nil {
 		return err
 	}
+
+	_, err = git.PlainClone(projectDir, false, &git.CloneOptions{
+		URL:      projectTemplateRepo,
+		Progress: os.Stdout,
+	})
+	if err != nil {
+		return err
+	}
+	if err := os.RemoveAll(path.Join(projectDir, ".git")); err != nil {
+		return err
+	}
+	if err := selectProject(name); err != nil {
+		return err
+	}
+
 	return nil
 }
 

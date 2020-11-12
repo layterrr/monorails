@@ -14,6 +14,8 @@ type projectsConfig struct {
 	Selected string            `yaml:"selected"`
 }
 
+const projectTemplateRepo = "https://github.com/layterrr/gcp-project-template"
+
 func projectsConfigPath() (string, error) {
 	projectConfig, ok := os.LookupEnv("MONORAILS_CONFIG")
 	if ok {
