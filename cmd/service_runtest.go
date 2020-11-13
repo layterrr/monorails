@@ -12,7 +12,7 @@ import (
 )
 
 func testService(service string) error {
-	serviceConfig, err := readServiceConfig("projectDir", service)
+	serviceConfig, err := readServiceConfig(service)
 	if err != nil {
 		return err
 	}
@@ -48,7 +48,7 @@ var testServiceCmd = &cobra.Command{
 		var err error
 		services := args
 		if allServices {
-			services, err = listServices("projectDir")
+			services, err = listServices()
 			if err != nil {
 				fmt.Printf("Failed to list services: %v\n", err)
 				os.Exit(1)

@@ -13,7 +13,7 @@ var defaultRegion = "europe-west1"
 
 var environmentCmd = &cobra.Command{
 	Use:     "environment",
-	Aliases: []string{"environments"},
+	Aliases: []string{"environments", "env"},
 	Short:   "Commands to create and manage gcloud environments",
 }
 

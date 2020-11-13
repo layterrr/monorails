@@ -11,23 +11,15 @@ import (
 )
 
 func createProject(name string) error {
+	if err := addProject(name); err != nil {
+		return err
+	}
+
 	projectsConfig, err := readProjectsConfig()
 	if err != nil {
 		return err
 	}
-	if _, ok := projectsConfig.Projects[name]; ok {
-		return errors.New("Project already exists")
-	}
-	pwd, err := os.Getwd()
-	if err != nil {
-		return err
-	}
-
-	projectDir := path.Join(pwd, name)
-	projectsConfig.Projects[name] = projectDir
-	if err := updateProjectsConfig(projectsConfig); err != nil {
-		return err
-	}
+	projectDir := projectsConfig.Projects[name]
 
 	_, err = git.PlainClone(projectDir, false, &git.CloneOptions{
 		URL:      projectTemplateRepo,

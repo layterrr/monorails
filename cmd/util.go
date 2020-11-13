@@ -14,13 +14,12 @@ import (
 
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 
-func getProjectDirectory() string {
-	curDir := os.Getenv("CURRENT_MONORAILS_DIR")
-	if len(curDir) == 0 {
-		fmt.Println("No $CURRENT_MONORAILS_DIR variable set")
-		os.Exit(1)
+func getProjectDirectory() (string, error) {
+	projectsConfig, err := readProjectsConfig()
+	if err != nil {
+		return "", err
 	}
-	return curDir
+	return projectsConfig.Projects[projectsConfig.Selected], nil
 }
 
 func getEnv(key, fallback string) string {

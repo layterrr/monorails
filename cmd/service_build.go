@@ -34,7 +34,7 @@ var buildServiceCmd = &cobra.Command{
 		var err error
 		serviceNames := args
 		if allServices {
-			serviceNames, err = listServices("projectDir")
+			serviceNames, err = listServices()
 			if err != nil {
 				fmt.Printf("Error listing services: %v", err)
 				os.Exit(1)
@@ -42,7 +42,7 @@ var buildServiceCmd = &cobra.Command{
 		}
 
 		for _, serviceName := range serviceNames {
-			serviceConfig, err := readServiceConfig("projectDir", serviceName)
+			serviceConfig, err := readServiceConfig(serviceName)
 			if err != nil {
 				fmt.Printf("Error reading service config: %v", err)
 				os.Exit(1)

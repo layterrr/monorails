@@ -14,7 +14,7 @@ var allServices bool
 
 var serviceCmd = &cobra.Command{
 	Use:     "service",
-	Aliases: []string{"services"},
+	Aliases: []string{"services", "svc"},
 	Short:   "Commands for creating and managing services",
 }
 
@@ -33,7 +33,11 @@ type serviceConfig struct {
 	IncludePaths    []string `yaml:"include"`
 }
 
-func readServiceConfig(projectDir, service string) (*serviceConfig, error) {
+func readServiceConfig(service string) (*serviceConfig, error) {
+	projectDir, err := getProjectDirectory()
+	if err != nil {
+		return nil, err
+	}
 	config := &serviceConfig{}
 	in, err := ioutil.ReadFile(path.Join(projectDir, service, "service.yml"))
 	if err != nil {

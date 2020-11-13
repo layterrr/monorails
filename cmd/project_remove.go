@@ -28,7 +28,7 @@ func removeProject(name string) error {
 var removeProjectCmd = &cobra.Command{
 	Use:     "remove",
 	Aliases: []string{"delete", "rm"},
-	Short:   "Removes project from monorails config. It will not remove the repository.",
+	Short:   "Removes project from monorails config",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("Must specify at least one project name")

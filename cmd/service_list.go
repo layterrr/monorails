@@ -9,7 +9,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func listServices(projectDir string) ([]string, error) {
+func listServices() ([]string, error) {
+	projectsConfig, err := readProjectsConfig()
+	if err != nil {
+		return nil, err
+	}
+	projectDir := projectsConfig.Projects[projectsConfig.Selected]
+
 	services := []string{}
 	servicesDir := path.Join(projectDir, "services")
 	files, err := ioutil.ReadDir(servicesDir)
@@ -37,7 +43,7 @@ var listServicesCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all services",
 	Run: func(cmd *cobra.Command, args []string) {
-		services, err := listServices("projectDir")
+		services, err := listServices()
 		if err != nil {
 			panic(err)
 		}

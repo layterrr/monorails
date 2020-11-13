@@ -38,8 +38,8 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "n", false, "log any commands with side effects")
-	rootCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "Force command. Required to run dangerous actions on protected projects.")
+	rootCmd.PersistentFlags().BoolVarP(&dryRun, "dry-run", "n", false, "Log commands without executing them")
+	rootCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "Force actions on protected projects.")
 	rootCmd.PersistentFlags().BoolVar(&isProd, "prod", false, "Run commands against production")
 	rootCmd.PersistentFlags().BoolVar(&isStaging, "staging", false, "Run commands against staging")
 	rootCmd.PersistentFlags().BoolVar(&isTest, "test", false, "Run commands against test")

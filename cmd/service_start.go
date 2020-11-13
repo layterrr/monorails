@@ -43,7 +43,7 @@ var startServicesCmd = &cobra.Command{
 		var err error
 		serviceNames := args
 		if allServices {
-			serviceNames, err = listServices("projectDir")
+			serviceNames, err = listServices()
 			if err != nil {
 				fmt.Printf("Error listing services: %v\n", err)
 				os.Exit(1)
