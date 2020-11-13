@@ -13,6 +13,11 @@ func startServices(services []string) error {
 	args := []string{
 		"-f", "./docker-compose.yml",
 	}
+	projectsConfig, err := readProjectsConfig()
+	if err != nil {
+		return err
+	}
+	projectDir := projectsConfig.Projects[projectsConfig.Selected]
 
 	for _, service := range services {
 		args = append(args, "-f")
@@ -21,10 +26,8 @@ func startServices(services []string) error {
 	args = append(args, "up")
 	args = append(args, "--build")
 	cmd := exec.Command("docker-compose", args...)
-	cmd.Dir = "projectDir"
-	fmt.Println("projectDir", cmd.Dir)
-	_, err := runCommand("Running docker-compose up", cmd)
-	if err != nil {
+	cmd.Dir = projectDir
+	if _, err := runCommand("Running docker-compose up", cmd); err != nil {
 		return err
 	}
 	return nil
