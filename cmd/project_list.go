@@ -11,7 +11,7 @@ var listProjectsCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all projects",
 	Run: func(cmd *cobra.Command, args []string) {
-		config, err := readProjectsConfig()
+		config, err := newProjectsConfig()
 		if err != nil {
 			fmt.Printf("%v\n", err)
 			os.Exit(1)

@@ -10,17 +10,15 @@ import (
 )
 
 func removeProject(name string) error {
-	projectsConfig, err := readProjectsConfig()
+	config, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
-	delete(projectsConfig.Projects, name)
-	if projectsConfig.Selected == name {
-		projectsConfig.Selected = ""
-	}
-	if err := updateProjectsConfig(projectsConfig); err != nil {
+
+	if err := config.removeProject(name); err != nil {
 		return err
 	}
+
 	return nil
 }
 

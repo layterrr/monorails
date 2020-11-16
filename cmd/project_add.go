@@ -4,28 +4,17 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"path"
 
 	"github.com/spf13/cobra"
 )
 
 func addProject(name string) error {
-	projectsConfig, err := readProjectsConfig()
+	config, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
 
-	if _, ok := projectsConfig.Projects[name]; ok {
-		return errors.New("Project already exists")
-	}
-	pwd, err := os.Getwd()
-	if err != nil {
-		return err
-	}
-
-	projectDir := path.Join(pwd, name)
-	projectsConfig.Projects[name] = projectDir
-	if err := updateProjectsConfig(projectsConfig); err != nil {
+	if err := config.addProject(name); err != nil {
 		return err
 	}
 

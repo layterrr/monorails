@@ -12,10 +12,11 @@ import (
 )
 
 func checkService(service string) error {
-	projectDir, err := getProjectDirectory()
+	projectsConfig, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
+	projectDir := projectsConfig.selectedProject()
 	serviceConfig, err := readServiceConfig(service)
 	if err != nil {
 		return err

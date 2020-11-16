@@ -10,11 +10,12 @@ import (
 )
 
 func listServices() ([]string, error) {
-	projectsConfig, err := readProjectsConfig()
+	projectsConfig, err := newProjectsConfig()
 	if err != nil {
 		return nil, err
 	}
-	projectDir := projectsConfig.Projects[projectsConfig.Selected]
+
+	projectDir := projectsConfig.selectedProject()
 
 	services := []string{}
 	servicesDir := path.Join(projectDir, "services")

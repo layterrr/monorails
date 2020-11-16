@@ -11,16 +11,15 @@ import (
 )
 
 func createProject(name string) error {
+	config, err := newProjectsConfig()
+	if err != nil {
+		return err
+	}
 	if err := addProject(name); err != nil {
 		return err
 	}
 
-	projectsConfig, err := readProjectsConfig()
-	if err != nil {
-		return err
-	}
-	projectDir := projectsConfig.Projects[name]
-
+	projectDir := config.selectedProject()
 	_, err = git.PlainClone(projectDir, false, &git.CloneOptions{
 		URL:      projectTemplateRepo,
 		Progress: os.Stdout,
@@ -31,7 +30,7 @@ func createProject(name string) error {
 	if err := os.RemoveAll(path.Join(projectDir, ".git")); err != nil {
 		return err
 	}
-	if err := selectProject(name); err != nil {
+	if err := config.selectProject(name); err != nil {
 		return err
 	}
 

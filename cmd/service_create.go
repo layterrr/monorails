@@ -37,11 +37,12 @@ type serviceTemplateVars struct {
 }
 
 func initServiceTerraform(name string) error {
-	projectsConfig, err := readProjectsConfig()
+	projectsConfig, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
-	projectDir := projectsConfig.Projects[projectsConfig.Selected]
+
+	projectDir := projectsConfig.selectedProject()
 	serviceModulesPath := path.Join(projectDir, "infra", "services.tf")
 	fmt.Println("Adding service to modules:", serviceModulesPath)
 
@@ -65,12 +66,12 @@ func createService(name string) error {
 		return errors.New("No template provided")
 	}
 
-	projectsConfig, err := readProjectsConfig()
+	projectsConfig, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
 
-	projectDir := projectsConfig.Projects[projectsConfig.Selected]
+	projectDir := projectsConfig.selectedProject()
 	serviceDir := path.Join(projectDir, "services", name)
 
 	if err := os.Mkdir(serviceDir, 0755); err != nil {

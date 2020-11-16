@@ -9,12 +9,12 @@ import (
 )
 
 func selectProject(name string) error {
-	projectsConfig, err := readProjectsConfig()
+	config, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
-	projectsConfig.Selected = name
-	if err := updateProjectsConfig(projectsConfig); err != nil {
+
+	if err := config.selectProject(name); err != nil {
 		return err
 	}
 	return nil

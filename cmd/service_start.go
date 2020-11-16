@@ -13,11 +13,12 @@ func startServices(services []string) error {
 	args := []string{
 		"-f", "./docker-compose.yml",
 	}
-	projectsConfig, err := readProjectsConfig()
+	projectsConfig, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
-	projectDir := projectsConfig.Projects[projectsConfig.Selected]
+
+	projectDir := projectsConfig.selectedProject()
 
 	for _, service := range services {
 		args = append(args, "-f")

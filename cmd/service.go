@@ -34,10 +34,12 @@ type serviceConfig struct {
 }
 
 func readServiceConfig(service string) (*serviceConfig, error) {
-	projectDir, err := getProjectDirectory()
+	projectsConfig, err := newProjectsConfig()
 	if err != nil {
 		return nil, err
 	}
+	projectDir := projectsConfig.selectedProject()
+
 	config := &serviceConfig{}
 	in, err := ioutil.ReadFile(path.Join(projectDir, service, "service.yml"))
 	if err != nil {

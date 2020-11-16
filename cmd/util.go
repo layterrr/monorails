@@ -14,14 +14,6 @@ import (
 
 var seededRand *rand.Rand = rand.New(rand.NewSource(time.Now().UnixNano()))
 
-func getProjectDirectory() (string, error) {
-	projectsConfig, err := readProjectsConfig()
-	if err != nil {
-		return "", err
-	}
-	return projectsConfig.Projects[projectsConfig.Selected], nil
-}
-
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
