@@ -25,7 +25,7 @@ func listServices() ([]string, error) {
 	}
 	for _, file := range files {
 		if file.IsDir() {
-			servicePath := path.Join("services", file.Name())
+			servicePath := path.Join(servicesDir, file.Name())
 			serviceYamlPath := path.Join(servicePath, "service.yml")
 			_, err := os.Stat(serviceYamlPath)
 			if err != nil {
@@ -34,7 +34,11 @@ func listServices() ([]string, error) {
 				}
 				return nil, err
 			}
-			services = append(services, servicePath)
+			serviceConfig, err := readServiceConfig("services/" + file.Name())
+			if err != nil {
+				return nil, err
+			}
+			services = append(services, serviceConfig.Name)
 		}
 	}
 	return services, nil
