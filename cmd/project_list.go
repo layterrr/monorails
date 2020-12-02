@@ -8,8 +8,9 @@ import (
 )
 
 var listProjectsCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List all projects",
+	Use:     "list",
+	Short:   "List all projects",
+	Aliases: []string{"ls"},
 	Run: func(cmd *cobra.Command, args []string) {
 		config, err := newProjectsConfig()
 		if err != nil {

@@ -15,7 +15,10 @@ func createProject(name string) error {
 	if err != nil {
 		return err
 	}
-	if err := addProject(name); err != nil {
+	if err := config.addProject(name); err != nil {
+		return err
+	}
+	if err := config.selectProject(name); err != nil {
 		return err
 	}
 
@@ -25,12 +28,10 @@ func createProject(name string) error {
 		Progress: os.Stdout,
 	})
 	if err != nil {
+		fmt.Printf("Config: %+v\n", config)
 		return err
 	}
 	if err := os.RemoveAll(path.Join(projectDir, ".git")); err != nil {
-		return err
-	}
-	if err := config.selectProject(name); err != nil {
 		return err
 	}
 
