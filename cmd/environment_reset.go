@@ -23,8 +23,11 @@ func resetEnvironment() (string, error) {
 		return "", err
 	}
 
-	printCmd("Generate terraform plan command. Run this in ./infra",
-		terraformCommand([]string{"apply"}, vars))
+	resetTerraformCmd, err := terraformCommand([]string{"apply"}, vars)
+	if err != nil {
+		return "", err
+	}
+	printCmd("Generate terraform plan command. Run this in ./infra", resetTerraformCmd)
 	return newProjectID, nil
 }
 

@@ -5,24 +5,25 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 
 	"github.com/spf13/cobra"
 )
 
 func startServices(services []string) error {
-	args := []string{
-		"-f", "./docker-compose.yml",
-	}
 	projectsConfig, err := newProjectsConfig()
 	if err != nil {
 		return err
 	}
-
 	projectDir := projectsConfig.selectedProject()
+
+	args := []string{
+		"-f", path.Join(projectDir, "docker-compose.yml"),
+	}
 
 	for _, service := range services {
 		args = append(args, "-f")
-		args = append(args, fmt.Sprintf("%s/docker-compose.yml", service))
+		args = append(args, path.Join(projectDir, service, "/docker-compose.yml"))
 	}
 	args = append(args, "up")
 	args = append(args, "--build")

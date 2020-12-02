@@ -34,11 +34,7 @@ func listServices() ([]string, error) {
 				}
 				return nil, err
 			}
-			serviceConfig, err := readServiceConfig("services/" + file.Name())
-			if err != nil {
-				return nil, err
-			}
-			services = append(services, serviceConfig.Name)
+			services = append(services, "services/"+file.Name())
 		}
 	}
 	return services, nil

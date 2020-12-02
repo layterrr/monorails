@@ -25,8 +25,11 @@ func createEnvironment(projectName string) (string, error) {
 		return "", err
 	}
 
-	printCmd("Generate terraform plan command. Run this in ./infra",
-		terraformCommand([]string{"apply"}, vars))
+	createTerraformCmd, err := terraformCommand([]string{"apply"}, vars)
+	if err != nil {
+		return "", err
+	}
+	printCmd("Generate terraform plan command. Run this in ./infra", createTerraformCmd)
 	return projectID, nil
 }
 

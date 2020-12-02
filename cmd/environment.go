@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"path"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -91,25 +92,41 @@ func appendUniqueSecrets(secrets map[string]string) (map[string]string, error) {
 	return secrets, nil
 }
 
-func terraformCommand(args []string, vars map[string]string) *exec.Cmd {
+func terraformCommand(args []string, vars map[string]string) (*exec.Cmd, error) {
 	cmd := exec.Command("terraform", args...)
-	cmd.Dir = "infraDir"
+	projectsConfig, err := newProjectsConfig()
+	if err != nil {
+		return nil, err
+	}
+	projectDir := projectsConfig.selectedProject()
+	infraDir := path.Join(projectDir, "infra")
+	cmd.Dir = infraDir
 
 	for k, v := range vars {
 		tfVar := fmt.Sprintf("TF_VAR_%s=\"%s\"", k, v)
 		cmd.Env = append(cmd.Env, tfVar)
 	}
 
-	return cmd
+	return cmd, nil
 }
 
 func createTerraformWorkspace(name string) error {
-	if _, err := runCommand("Create new terraform workspace", terraformCommand([]string{"workspace", "new", name}, nil)); err != nil {
+	initTerraformCmd, err := terraformCommand([]string{"init"}, nil)
+	if err != nil {
 		return err
 	}
-	if _, err := runCommand("Initialise terraform workspace", terraformCommand([]string{"init"}, nil)); err != nil {
+	if _, err := runCommand("Initialise terraform workspace", initTerraformCmd); err != nil {
 		return err
 	}
+
+	createTerraformWorkspaceCmd, err := terraformCommand([]string{"workspace", "new", name}, nil)
+	if err != nil {
+		return err
+	}
+	if _, err := runCommand("Create new terraform workspace", createTerraformWorkspaceCmd); err != nil {
+		return err
+	}
+
 	return nil
 }
 

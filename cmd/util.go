@@ -57,7 +57,12 @@ func createCommand(command, dir string) *exec.Cmd {
 
 func runCommand(description string, cmd *exec.Cmd) (string, error) {
 	if cmd.Dir == "" {
-		cmd.Dir = "projectDir"
+		projectsConfig, err := newProjectsConfig()
+		if err != nil {
+			return "", err
+		}
+		projectDir := projectsConfig.selectedProject()
+		cmd.Dir = projectDir
 	}
 	printCmd(description, cmd)
 	var out []byte

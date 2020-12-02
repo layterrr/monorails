@@ -22,8 +22,11 @@ func applyCommand() error {
 		return err
 	}
 
-	printCmd("Generate terraform apply command. Run this in ./infra",
-		terraformCommand([]string{"apply"}, vars))
+	applyTerraformCmd, err := terraformCommand([]string{"apply"}, vars)
+	if err != nil {
+		return err
+	}
+	printCmd("Generate terraform apply command. Run this in ./infra", applyTerraformCmd)
 
 	return nil
 }
